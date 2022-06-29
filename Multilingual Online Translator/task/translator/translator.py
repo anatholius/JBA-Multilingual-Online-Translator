@@ -3,11 +3,12 @@ Local translator with remote translating.
 """
 
 import argparse
-import os.path
 import sys
 
 import requests
 from bs4 import BeautifulSoup
+
+s = requests.Session()
 
 
 class Translator:
@@ -31,7 +32,7 @@ class Translator:
     source_lang: int = None
     target_lang: int = None
     word: str
-    dinner_recipe: list = None
+    dinner_recipe: list = []
     translations: list
     examples: zip
     the_dinner = {}
@@ -60,11 +61,17 @@ class Translator:
 
             # Remember the recipe for dinner
             # print('Remember the recipe for dinner', file=sys.stderr)
-            self.remember_recipe()
         else:
             ingredients = self.LANGS[self.target_lang]
             self.cook_the_dish(ingredients, word)
+            print('')
+            print(
+                'REMEMBER, you need to save file for specified target lag '
+                'too!!!',
+                file=sys.stderr)
+            print('')
 
+        self.remember_recipe()
         # Bring your multi-dish meal to the table, and say: dinner!
         # print('dinner!', file=sys.stderr)
         self.dinner()
@@ -96,18 +103,13 @@ class Translator:
             i = i + 1
 
     def remember_recipe(self):
-        # prepare recipe
-        self.prepare_recipe()
-
         # preparing file
         file_name = f'{self.word}.txt'
-        file_exists = os.path.exists(file_name)
+        # file_exists = os.path.exists(file_name)
 
-        # if not file_exists or input(
-        #     f'File "{file_name}" exists\nDo you want to override it?'
-        # ) != 'n':
         with open(file_name, 'w') as file:
-            file.writelines([f'{r}\n' for r in self.dinner_recipe])
+            lines = [f'{r}\n' for recipe in self.dinner_recipe for r in recipe]
+            file.writelines(lines)
             print(f'Saved in file: "{file_name}"', self.dinner_recipe)
 
         # if file_exists:
@@ -118,7 +120,7 @@ class Translator:
         url = f'{self.ADDRESS}/{self.direction(target)}/{word}'
         print(f'Request for {target_lang} translation to: {url}')
 
-        r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        r = s.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         print(f'{r.status_code} {r.reason}')
 
         if r.ok:
@@ -142,28 +144,40 @@ class Translator:
                 'translations': self.translations,
                 'examples': self.examples,
             }
+
+            def prepare_dish_recipe(source_lang, dishes_count):
+                if target == source_lang:
+                    return None
+                recipe = []
+                target_language = target.capitalize()
+
+                recipe.append(f'{target_language} Translations:')
+                t = dish['translations']
+                translations = [t[0]] if dishes_count > 1 else t
+                recipe += translations
+
+                recipe.extend(['', f'{target_language} Examples:'])
+
+                e = dish['examples']
+                examples = [list(e)[0]] if dishes_count > 1 else list(e)
+                recipe += [rcp for tr in examples for rcp in list(tr) + ['']]
+
+                return recipe
+
+            dish_recipe = prepare_dish_recipe(
+                self.LANGS[self.source_lang],
+                len(self.the_dinner.keys())
+            )
+            if dish_recipe:
+                self.dinner_recipe.append(dish_recipe)
+
             self.the_dinner[target] = dish
 
     def dinner(self):
         dishes_count = len(self.the_dinner.keys())
         print(f'There is {dishes_count}-dish dinner!', file=sys.stderr)
-        if self.dinner_recipe:
-            for line in self.dinner_recipe:
-                print(line)
-        else:
-            for target, dish in self.the_dinner.items():
-                if target == self.LANGS[self.source_lang]:
-                    continue
-                target_language = target.capitalize()
-                print(f'{target_language} Translations:\n')
-                t = dish['translations']
-                translations = [t[0]] if dishes_count > 1 else t
-                print(*translations, sep='\n')
-                print(f'{target_language} Examples:\n')
-                e = list(dish['examples'])
-                dish_examples = [list(e)[0]] if dishes_count > 1 else e
-                examples = ['\n'.join(e) for e in dish_examples]
-                print(*examples, sep='\n\n')
+        for line in self.dinner_recipe:
+            print(*line, sep='\n')
 
 
 """
@@ -173,7 +187,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action='store_true')
 if parser.parse_args().test:
     # Translator().translate(3, 4, 'hello')
-    Translator().translate(3, 0, 'hello')
+    # Translator().translate(3, 0, 'hello')
+    Translator().translate(12, 3, 'глаза')
     exit('Enjoy your meal!')
 
 Translator().translate(
