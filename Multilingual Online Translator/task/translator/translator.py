@@ -20,24 +20,35 @@ class Translator:
 
     source_lang: int = None
     target_lang: int = None
-    word: str
     translation_board: list = []
+    translations_board = {}
+    word: str
     translations: list
     examples: zip
-    translations_board = {}
 
     def __init__(self):
+        """
+        Welcome in Translator :)
+        """
         print(*[
             'Hello, welcome to the translator. Translator supports:',
             *[f'{i + 1}. {L.capitalize()}' for i, L in enumerate(self.LANGS)]
         ], sep='\n')
 
     def direction(self, target_lang: str = None):
+        """
+        Prepare direction string for URL.
+        """
+
         if target_lang is None:
             target_lang = self.target_lang
         return f'{self.LANGS[self.source_lang]}-{target_lang}'
 
     def translate(self, source: int, target: int, word: str):
+        """
+        Main translation action in class.
+        """
+
         self.source_lang = source - 1
         self.target_lang = target - 1
         self.word = word
@@ -54,37 +65,14 @@ class Translator:
         # store translations to file
         self.store_translation()
 
-        # print.report
+        # print report
         self.report()
 
-    def prepare_recipe(self):
-        dishes_count = len(self.translations_board.keys())
-        self.translation_board = []
-        i = 0
-        for target, dish in self.translations_board.items():
-            if target == self.LANGS[self.source_lang]:
-                continue
-            target_language = target.capitalize()
-            nl = "" if i == 0 else "\n"
-            self.translation_board.append(
-                f'\n{nl}{target_language} Translations:')
-            t = dish['translations']
-            translations = [t[0]] if dishes_count > 1 else t
-
-            for t in translations:
-                self.translation_board.append(f'{t}')
-
-            self.translation_board.append(f'\n{target_language} Examples:')
-
-            e = dish['examples']
-            dish_examples = [list(e)[0]] if dishes_count > 1 else e
-            examples = ['\n'.join(e) for e in dish_examples]
-
-            for t in examples:
-                self.translation_board.append(f'{t}')
-            i = i + 1
-
     def store_translation(self):
+        """
+        Save `self.translations_board` to file.
+        """
+
         file_name = f'{self.word}.txt'
 
         with open(file_name, 'w') as file:
@@ -93,6 +81,14 @@ class Translator:
             print(f'File "{file_name}" saved.', file=sys.stderr)
 
     def translate_online(self, target: str, word: str):
+        """
+        Request to `context.reverso` for translation and store retrieved
+        translations in instance attribute.
+
+        After that this attribute is used for file storage and console
+        output, without repeating the same steps
+        """
+
         target_lang = target.capitalize()
         url = f'{self.ADDRESS}/{self.direction(target)}/{word}'
         print(f'Request for {target_lang} translation to: {url}')
@@ -119,8 +115,8 @@ class Translator:
                 [e.text.strip() for e in target_soup if e.text.strip()]
             )
 
-            # Complete the dish for dinner
-            dish = {
+            # Complete lang translation board for all translations board
+            lang_translation_board = {
                 'translations': self.translations,
                 'examples': self.examples,
             }
@@ -134,13 +130,13 @@ class Translator:
                 target_language = target.capitalize()
 
                 recipe.append(f'{target_language} Translations:')
-                t = dish['translations']
+                t = lang_translation_board['translations']
                 translations = [t[0]] if translations_count > 1 else t
                 recipe += translations
 
                 recipe.extend(['', f'{target_language} Examples:'])
 
-                e = dish['examples']
+                e = lang_translation_board['examples']
                 # get all examples or just first if target_lang was `0`
                 ex = [list(e)[0]] if translations_count > 1 else list(e)
                 # flatten the array with examples pairs
@@ -157,12 +153,17 @@ class Translator:
             if single_translation:
                 self.translation_board.append(single_translation)
 
-            self.translations_board[target] = dish
+            self.translations_board[target] = lang_translation_board
 
     def report(self):
-        dishes_count = len(self.translations_board.keys())
+        """
+        Print report to console for tests purposes
+        """
+
+        translations_count = len(self.translations_board.keys())
         print(
-            f'There is translations board with {dishes_count} languages!',
+            f'There is translations board with {translations_count} '
+            f'languages!',
             file=sys.stderr
         )
         for line in self.translation_board:
@@ -178,7 +179,7 @@ if parser.parse_args().test:
     Translator().translate(3, 4, 'hello')
     Translator().translate(3, 0, 'hello')
     Translator().translate(12, 3, 'глаза')
-    exit('Enjoy your meal!')
+    exit('Enjoy the translations!')
 
 Translator().translate(
     int(input("Type the number of your language:\n")),
