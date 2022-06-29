@@ -1,3 +1,82 @@
+Spanish Translations:
+hola
+buenos días
+qué tal
+saludo
+buen día
+¿Diga
+aló
+diga
+bueno
+¿Oiga
+dígame
+oigo
+Hello
+Buenas tardes
+saludar
+
+Spanish Examples:
+Well, hello, Miss Anchor-liar.
+Bien, hola, señorita presentadora de mentiras.
+
+Just saying hello in Kanpuriya tradition.
+Solo digo Hola en la tradición de Kanpur.
+
+We just thought we'd come say hello.
+Nos pareció que habíamos venido decir hola.
+
+Andrew, say hello to Niles.
+Andrew, dile hola a Niles.
+
+And say hello to your father.
+Y di hola a tu padre.
+
+Say hello to goodbye, Dr. Venture.
+Dile hola a adiós, Dr. Venture.
+
+It's fabulous - hello, bestseller list.
+Es fabuloso, hola, la lista de libros más vendidos.
+
+Just wanted to say hello to the most beautiful girl in the world.
+Solo quería decirle hola a la chica más guapa en el mundo.
+
+In case you've never met one before, hello.
+En caso de que no hayas conocido a uno antes, hola.
+
+Hello, hello, hello, hello, hel...
+Hola, hola, hola, hola, hola...
+
+Well, hello, hello, hello.
+Vaya... Hola, hola, hola.
+
+Sir, hello... hello, sir... hello...
+Señor, hola... hola, señor... hola...
+
+Well, hello, hello, hello.
+Bien, hola, hola, hola.
+
+Hello dad, hello mum, hello gentlemen.
+Hola papá, hola mamá, hola señores.
+
+Hello, Theatre, hello, hello...
+Hola, teatro, hola, hola...
+
+Sir, sir hello, hello.
+Señor, señor, hola, hola.
+
+Well hello Lucky, hello Slip.
+Hola, Lucky, hola, Slip.
+
+Listen... Listen... hello... hello...
+Escucha... Escucha... hola... hola...
+
+Correct, hello, but, hello, we have to hit it in a way, hello, that makes the product memorable.
+Correcto, hola, pero, hola, tenemos que lanzarlo de algún modo, hola, eso hace al producto recordable.
+
+Hello, hello, hello, children.
+Hola, hola, hola, niños.
+
+
 Arabic Translations:
 مرحبا
 أهلا
@@ -74,83 +153,14 @@ hello will put the dog juju in the barn
 Say hello to Beelzebub after you fly first class
 وقول مرحبا لـ رئيس الشياطين بعد أن تسافر في الدرجة الأولى
 
+
 German Translations:
 hallo
-grüß Gott
-gegrüßt
-grüezi
-Hello
-guten Tag
-Hi
-Guten Abend
-servus
-Guten Morgen
-begrüßen
-grüßen
-Begrüssungsphrase
-begrüßt
-willkommen
 
 German Examples:
 Say goodbye to anti-aliasing and hello to naturally crisp graphics.
 Verabschiede Dich von Anti-Aliasing und sag Hallo zu natürlich gestochen scharfer Grafik.
 
-Some surprising creative bugs came and said hello.
-Es kam so manch ein überaschender Bug vorbei, und sagte hallo...
-
-We agreedellen wolf is innocent. hello.
-Wir waren einverstanden damit, dass Wolf unschuldig ist. Hallo.
-
-Americans- you can never just say hello.
-Amerikaner - Sie können nicht einfach "Hallo" sagen.
-
-I wanted to... say hello.
-Ich war in der Gegend, ich wollte dich... dir hallo sagen.
-
-Finally got a personalized hello from Earl.
-Ich habe endlich ein personifiziertes hallo von Earl bekommen.
-
-Tell Martha... I said hello.
-Sag Martha,... dass ich Hallo gesagt habe.
-
-Tell everyone Sarah Corvus says hello.
-Erzähl' allen, Sarah Corvus sagt Hallo.
-
-Say hello to a relaxing and comfortable life...
-Sagen Sie einfach Hallo zu einem ruhigen und komfortablen Leben...
-
-Walk back to the center saying hello.
-Laufe zurück zum Kreismittelpunkt und sage „Hallo".
-
-Michael came out to the beach in the morning and said hello.
-Michael kam am Morgen an den Strand und sagte hallo.
-
-Say goodbye to welded carts and hello to FlexQube
-Verabschieden Sie sich von geschweißten Lösungen und sagen Sie Hallo zu FlexQube
-
-Stop by casually to say hello and ask what class he has next.
-Halte kurz an, sag ihm Hallo und frage ihn welches Fach er als nächstes hat.
-
-Let's say hello to John.
-Lass uns Hallo zu John sagen.
-
-Malvina herself said the next day hello.
-Malvina selbst sagte am nächsten Tag hallo.
-
-I asked him why hello two times.
-Ich fragte ihn warum zweimal hallo.
-
-Say 'hello' to Abigail and her panda.
-Sagt 'Hallo' zu Abigail und ihren Panda.
-
-Tell us about your project ideas, wishes or just say hello.
-Erzählen Sie uns von Ihren Projekten, Ideen und Wünschen oder sagen Sie einfach nur Hallo.
-
-Send messages, call to say hello and share what's happening with video on your Mac.
-Senden Sie Nachrichten, rufen Sie an, um Hallo zu sagen, und teilen Sie Ihre Erlebnisse per Video auf Ihrem Mac.
-
-Smile and say hello every time until it becomes a habit.
-Lächle und sag jedes Mal Hallo, bis es zu einer Gewohnheit wird.
 
 Spanish Translations:
 hola
@@ -159,12 +169,14 @@ Spanish Examples:
 Well, hello, Miss Anchor-liar.
 Bien, hola, señorita presentadora de mentiras.
 
+
 French Translations:
 bonjour
 
 French Examples:
 Goodbye England and hello the Netherlands...
 Au revoir l'Angleterre et bonjour les Pays-Bas...
+
 
 Hebrew Translations:
 שלום
@@ -173,12 +185,14 @@ Hebrew Examples:
 How come they never say hello?
 איך זה שהן אף פעם לא אומרות שלום.
 
+
 Japanese Translations:
 こんにちは
 
 Japanese Examples:
 To all aspiring pilots, hello!
 パイロットを目指しているみんな、こんにちは。
+
 
 Dutch Translations:
 gedag
@@ -187,12 +201,14 @@ Dutch Examples:
 Flirting with every girl says hello.
 Die flirt met elk meisje dat gedag zegt.
 
+
 Polish Translations:
 cześć
 
 Polish Examples:
 You had me at "hello".
 Wystarczyło mi twoje "cześć".
+
 
 Portuguese Translations:
 olá
@@ -201,12 +217,14 @@ Portuguese Examples:
 That was my last kiss hello.
 Pois eu garanto que aquele foi o meu último beijo de olá.
 
+
 Romanian Translations:
 salut
 
 Romanian Examples:
 I came by to say hello.
 Am avut o pauză de masă și am trecut să te salut.
+
 
 Russian Translations:
 привет
@@ -215,10 +233,12 @@ Russian Examples:
 Tell her slipping' Jimmy says hello.
 Передай ей, что Скользкий Джимми передает ей привет.
 
+
 Turkish Translations:
 selam
 
 Turkish Examples:
 Mash Sultan Ali, she said hello.
 Meş Sultan Ali, kız selam verdi.
+
 
