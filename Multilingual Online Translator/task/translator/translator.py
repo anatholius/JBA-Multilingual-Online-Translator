@@ -8,14 +8,15 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+
 # speed up download
-session = requests.Session()
+# session = requests.Session()
 
 
 class Translator:
     LANGS = ['arabic', 'german', 'english', 'spanish', 'french', 'hebrew',
              'japanese', 'dutch', 'polish', 'portuguese', 'romanian',
-             'russian', 'turkish']
+             'russian', 'turkish', ]
     ADDRESS = 'https://context.reverso.net/translation'
 
     source_lang: int = None
@@ -44,11 +45,15 @@ class Translator:
             target_lang = self.target_lang
         return f'{self.LANGS[self.source_lang]}-{target_lang}'
 
-    def translate(self, source: int, target: int, word: str):
+    def translate(self, source: str, target: str, word: str):
         """
         Main translation action in class.
         """
-
+        source = self.LANGS.index(source)
+        if target in self.LANGS:
+            target = self.LANGS.index(source)
+        else:
+            target = 0
         self.source_lang = source - 1
         self.target_lang = target - 1
         self.word = word
@@ -93,8 +98,23 @@ class Translator:
         url = f'{self.ADDRESS}/{self.direction(target)}/{word}'
         print(f'Request for {target_lang} translation to: {url}')
 
-        r = session.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-        print(f'{r.status_code} {r.reason}')
+        r = requests.get(url, headers={
+            'User-Agent': 'Mozilla/5.0',
+            'Content-Type': 'text/html; charset=utf-8'
+        })
+        # print(f'{r.status_code} {r.reason}')
+        print('url', url)
+        if len(r.history):
+            exit(
+                f'\nCannot translate the word "{word}" from language '
+                f'"{Translator.LANGS[source_lang - 1].capitalize()}" to '
+                f'language '
+                f'"{target_lang}"\n'
+            )
+        # print('r.history', r.history)
+        # print('r.is_redirect', r.is_redirect)
+        # print('session', session)
+        # exit('stop request')
 
         if r.ok:
             """Prepare translation board"""
@@ -131,6 +151,7 @@ class Translator:
 
                 recipe.append(f'{target_language} Translations:')
                 t = lang_translation_board['translations']
+                print(t)
                 translations = [t[0]] if translations_count > 1 else t
                 recipe += translations
 
@@ -170,22 +191,77 @@ class Translator:
             print(*line, sep='\n')
 
 
-"""
-Pass `-t` to the command that starts the program for local tests
-"""
-parser = argparse.ArgumentParser()
-parser.add_argument('-t', '--test', action='store_true')
+parser = argparse.ArgumentParser(
+    exit_on_error=False,
+    description='Local translator with remote translating.'
+)
+parser.add_argument('-t', '--test', action='store_true',
+                    help='enable test mode with local tests')
+parser.add_argument('source_lang', type=str, nargs='?',
+                    help='Number of source language.')
+parser.add_argument('target_lang', type=str,
+                    nargs='?',
+                    help='Number of target language or "all" to translate to '
+                         'all available languages.')
+parser.add_argument('word', type=str,
+                    nargs='?',
+                    help='The word to translate.')
+
+args = parser.parse_args()
+args_dict = args.__dict__
+
+
+def get_index(value):
+    return (
+        (value and value in args_dict.values())
+        and list(args_dict.keys())[list(args_dict.values()).index(value)]
+        or None
+    )
+
+
+one_of = (
+    get_index(args.source_lang)
+    or get_index(args.source_lang)
+    or get_index(args.word)
+)
+each_of = (
+    get_index(args.source_lang)
+    and get_index(args.source_lang)
+    and get_index(args.word)
+)
+
 if parser.parse_args().test:
-    Translator().translate(3, 4, 'hello')
-    Translator().translate(3, 0, 'hello')
-    Translator().translate(12, 3, 'глаза')
+    # exit('Local tests:')
+    # Translator().translate(3, 4, 'hello')
+    # Translator().translate(3, 0, 'hello')
+    # Translator().translate(12, 3, 'глаза')
+    Translator().translate('english', 'all', 'love')
     exit('Enjoy the translations!')
 
-Translator().translate(
-    int(input("Type the number of your language:\n")),
-    int(input(
-        "Type the number of a language you want to translate to"
-        " or '0' to translate to all languages:\n"
-    )),
-    input("Type the word you want to translate:\n")
-)
+if each_of:
+    print('args_dict', args_dict)
+    if args_dict['source_lang'] == args_dict['target_lang']:
+        print('\nThere is nothing to translate from {} to {}!\n'.format(
+            args_dict['source_lang'].capitalize(),
+            args_dict['target_lang'].capitalize(),
+        ), file=sys.stderr)
+        exit()
+
+    source_lang = args_dict['source_lang']
+    target_lang = args_dict['target_lang']
+    word = args_dict['word']
+
+    # print(source_lang, target_lang, word)
+    # exit('stop')
+    Translator().translate(
+        source_lang,
+        target_lang,
+        word,
+    )
+else:
+    exit("""
+usage: translator.py [-h] [-t] source_lang target_lang word
+translator.py: error: the following arguments are required: {missing_args}
+""".format(
+        missing_args=', '.join([k for k, v in args_dict.items() if v is None])
+    ))
