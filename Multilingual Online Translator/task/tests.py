@@ -2,10 +2,9 @@ from hstest.stage_test import StageTest
 from hstest.test_case import TestCase
 from hstest.check_result import CheckResult
 import requests
-from bs4 import BeautifulSoup
 from itertools import chain
+from bs4 import BeautifulSoup
 import sys
-import re
 
 
 if sys.platform.startswith("win"):
@@ -21,9 +20,9 @@ class TranslatorTest(StageTest):
     def generate(self):
         return [
             TestCase(stdin='fr\nhello\n', attach="fr\nhello"),
-            TestCase(stdin='fr\nliberty\n', attach="fr\nliberty"),
-            TestCase(stdin='fr\nbridge\n', attach="fr\nbridge"),
-            TestCase(stdin='en\ngens\n', attach="en\ngens"),
+            TestCase(stdin='fr\nbrotherhood\n', attach="fr\nbrotherhood"),
+            TestCase(stdin='fr\nengland\n', attach="fr\nengland"),
+            TestCase(stdin='en\nfromage\n', attach="en\nfromage"),
         ]
 
     def check(self, reply, attach):
@@ -38,44 +37,61 @@ class TranslatorTest(StageTest):
                                      "before printing the translations of the word.\n"
                                      "Also, this word should follow the internet connection identifier.")
 
-        translations = reply[reply.lower().index("translation"):].strip().split("\n")
-        translations = [line for line in translations if line]
-        if len(translations) != 3:
-            return CheckResult.wrong("An incorrect number of lines found in your output's section with translations. \n"
-                                     "There should be exactly 3 lines in it: one, containing the word \"Translations\", "
-                                     "one for the translations and one for examples.")
+        translations = reply[reply.lower().index("translation"):].strip()
 
-        translations, examples = translations[-2].lower(), translations[-1].lower()
+        if "example" not in translations.lower():
+            return CheckResult.wrong("Your program should output the phrase \"<Language> Examples\" "
+                                     "before printing the examples of the translations.\n "
+                                     "The examples should also follow the translations.")
+
+        examples_index = translations.lower().index("example")
+        examples = translations[examples_index:].strip().split("\n")
+        examples = [line for line in examples if line and not line.lower().startswith('example')]
+
+        translations = translations[:examples_index].split("\n")[:-1]
+        translations = [line for line in translations if line and not line.lower().startswith('translation')]
+
+        if len(translations) == 0:
+            return CheckResult.wrong("No translations are found. \n"
+                                     "Make sure that each translated word is placed in a new line.")
+
+        if len(examples) == 0:
+            return CheckResult.wrong("No context examples are found. \n"
+                                     "Make sure that your context examples follow the translations \n"
+                                     "and that each example is placed in a new line.")
+
         true_translations, true_examples = get_results(language, word)
         if true_translations == "Connection error":
             return CheckResult.wrong("Connection error occurred while connecting to the context.reverso.net\n"
                                      "Please, try again a bit later.")
 
-        translations_intersection = [True for true_transl in true_translations if true_transl.lower() in translations]
+        translations_intersection = [True for user_translation in translations
+                                     if user_translation.lower() in true_translations]
+
         if not translations_intersection:
-            return CheckResult.wrong("The correct translations of the word are not found. \n"
-                                     "Make sure you output them in the right format: \n"
-                                     "your program should output a list with translations of the given word.")
-        examples_intersection = [True for true_example in true_examples if true_example.lower() in examples]
+            return CheckResult.wrong("No correct translations are found.\n"
+                                     "Make sure that you place every word in a new line \n"
+                                     "and get rid of lists' commas, quotation marks and square brackets.")
+
+        examples_intersection = [True for user_example in examples if user_example.lower() in true_examples]
 
         if not examples_intersection:
-            return CheckResult.wrong("The correct examples for the word are not found. \n"
-                                     "Make sure you output them in the right format: \n"
-                                     "your program should output a list with examples for the given word. \n"
-                                     "Your program should output the example sentences both in the source and target language.")
+            return CheckResult.wrong("No correct examples are found.\n"
+                                     "Make sure that you place every example in a new line \n"
+                                     "and get rid of lists' commas, quotation marks and square brackets.")
+        elif len(examples_intersection) < len(examples) // 2:
+            return CheckResult.wrong("Please, make sure that the output of your program contains \n"
+                                     "the correct examples.")
+
+        if len(true_examples) >= 10 and len(examples) < 10 or \
+                len(true_examples) < 10 and len(true_examples) != len(examples_intersection):
+            return CheckResult.wrong("Please, output at least 5 examples for the given word\n"
+                                     "(that is, 10 sentences, one for each of two languages). \n"
+                                     "If there are less than 5 examples, output them all.\n"
+                                     "Make sure that you place every sentence in a new line \n"
+                                     "and get rid of lists' commas, quotation marks and square brackets.")
 
         return CheckResult.correct()
-
-
-def clean_string(string_list):
-    out_string = []
-    for string in string_list:
-        string = re.sub('\n', '', string)
-        string = re.sub(' {2,}', ' ', string)
-        string = re.sub('^ ', '', string)
-        if string != '':
-            out_string.append(string)
-    return out_string
 
 
 def get_results(language, word):
@@ -100,11 +116,11 @@ def get_results(language, word):
     sentences_src, sentences_target = \
         raw_contents.find_all('div', {"class": "src ltr"}), raw_contents.find_all('div', {"class": ["trg ltr", "trg rtl arabic", "trg rtl"]})
 
-    translations = set([translation.get_text().strip() for translation in translations])
-    sentences = set([sentence.get_text().strip() for sentence in
-                    list(chain(*[sentence_pair for sentence_pair in zip(sentences_src, sentences_target)]))])
+    translation_list = [translation.get_text().strip().lower() for translation in translations]
+    sentence_list = [sentence.get_text().strip().lower() for sentence in
+                     list(chain(*[sentence_pair for sentence_pair in zip(sentences_src, sentences_target)]))]
 
-    return translations, sentences
+    return set(translation_list), set(sentence_list)
 
 
 if __name__ == '__main__':
