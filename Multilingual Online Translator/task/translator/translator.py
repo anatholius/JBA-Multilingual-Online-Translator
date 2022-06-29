@@ -26,6 +26,8 @@ class Translator:
     ]
     source_lang: int = None
     target_lang: int = None
+    translations: list
+    examples: zip
 
     def __init__(self):
         print(*[
@@ -49,7 +51,7 @@ class Translator:
         if r.ok:
             # Cook the pizza, ee.. soup
             soup = BeautifulSoup(r.content, 'html.parser')
-            translations = [
+            self.translations = [
                 t.text for i, t in
                 enumerate(soup.find_all('span', {'class': 'display-term'}))
             ]
@@ -58,17 +60,20 @@ class Translator:
             source_soup = soup.find_all('div', {'class': 'src ltr'})
             target_soup = soup.find_all('div', {'class': 'trg ltr'})
             # Prepare examples translation pairs with stripping values texts
-            examples = zip(
+            self.examples = zip(
                 [e.text.strip() for e in source_soup if e.text.strip()],
                 [e.text.strip() for e in target_soup if e.text.strip()]
             )
 
-            # Bring your meal to the table, dinner!
-            print(
-                f'\n{self.LANGS[self.target_lang].capitalize()} Translations:')
-            print(*translations, sep='\n')
-            print(f'\n{self.LANGS[self.target_lang].capitalize()} Examples:')
-            print(*['\n'.join(e) for e in examples], sep='\n\n')
+            # Bring your meal to the table, and say: dinner!
+            self.dinner()
+
+    def dinner(self):
+        print(
+            f'\n{self.LANGS[self.target_lang].capitalize()} Translations:')
+        print(*self.translations, sep='\n')
+        print(f'\n{self.LANGS[self.target_lang].capitalize()} Examples:')
+        print(*['\n'.join(e) for e in self.examples], sep='\n\n')
 
 
 """
