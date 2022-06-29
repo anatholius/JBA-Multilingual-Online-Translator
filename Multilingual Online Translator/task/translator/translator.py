@@ -45,6 +45,7 @@ class Translator:
         address = 'https://context.reverso.net/translation'
         url = f'{address}/{self.direction()}/{word}'
         print(f'Asking for translation to: {url}')
+
         r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         print(f'{r.status_code} {r.reason}')
 
@@ -69,15 +70,15 @@ class Translator:
             self.dinner()
 
     def dinner(self):
-        print(
-            f'\n{self.LANGS[self.target_lang].capitalize()} Translations:')
+        target_language = self.LANGS[self.target_lang].capitalize()
+        print(f'\n{target_language} Translations:')
         print(*self.translations, sep='\n')
-        print(f'\n{self.LANGS[self.target_lang].capitalize()} Examples:')
+        print(f'\n{target_language} Examples:')
         print(*['\n'.join(e) for e in self.examples], sep='\n\n')
 
 
 """
-Pass -t for local tests to run program
+Pass `-t` to the command that starts the program for local tests
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action='store_true')
