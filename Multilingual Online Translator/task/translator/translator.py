@@ -9,7 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # speed up download
-s = requests.Session()
+session = requests.Session()
 
 
 class Translator:
@@ -97,7 +97,7 @@ class Translator:
         url = f'{self.ADDRESS}/{self.direction(target)}/{word}'
         print(f'Request for {target_lang} translation to: {url}')
 
-        r = s.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        r = session.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         print(f'{r.status_code} {r.reason}')
 
         if r.ok:
