@@ -3,78 +3,171 @@ Local translator with remote translating.
 """
 
 import argparse
+import sys
 
 import requests
 from bs4 import BeautifulSoup
 
+# speed up download
+session = requests.Session()
+
 
 class Translator:
-    LANGS = [
-        'arabic',
-        'german',
-        'english',
-        'spanish',
-        'french',
-        'hebrew',
-        'japanese',
-        'dutch',
-        'polish',
-        'portuguese',
-        'romanian',
-        'russian',
-        'turkish',
-    ]
+    LANGS = ['arabic', 'german', 'english', 'spanish', 'french', 'hebrew',
+             'japanese', 'dutch', 'polish', 'portuguese', 'romanian',
+             'russian', 'turkish']
+    ADDRESS = 'https://context.reverso.net/translation'
+
     source_lang: int = None
     target_lang: int = None
+    translation_board: list = []
+    translations_board = {}
+    word: str
     translations: list
     examples: zip
 
     def __init__(self):
+        """
+        Welcome in Translator :)
+        """
         print(*[
             'Hello, welcome to the translator. Translator supports:',
             *[f'{i + 1}. {L.capitalize()}' for i, L in enumerate(self.LANGS)]
         ], sep='\n')
 
-    def direction(self):
-        return f'{self.LANGS[self.source_lang]}-{self.LANGS[self.target_lang]}'
+    def direction(self, target_lang: str = None):
+        """
+        Prepare direction string for URL.
+        """
+
+        if target_lang is None:
+            target_lang = self.target_lang
+        return f'{self.LANGS[self.source_lang]}-{target_lang}'
 
     def translate(self, source: int, target: int, word: str):
+        """
+        Main translation action in class.
+        """
+
         self.source_lang = source - 1
         self.target_lang = target - 1
+        self.word = word
 
-        address = 'https://context.reverso.net/translation'
-        url = f'{address}/{self.direction()}/{word}'
-        print(f'Asking for translation to: {url}')
+        if self.target_lang < 0:
+            for t_lang_id, t_lang in enumerate(self.LANGS):
+                if t_lang_id == self.source_lang:
+                    continue
+                self.translate_online(t_lang, word)
+        else:
+            target_language = self.LANGS[self.target_lang]
+            self.translate_online(target_language, word)
 
-        r = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        # store translations to file
+        self.store_translation()
+
+        # print report
+        self.report()
+
+    def store_translation(self):
+        """
+        Save `self.translations_board` to file.
+        """
+
+        file_name = f'{self.word}.txt'
+
+        with open(file_name, 'w') as file:
+            lines = [f'{r}\n' for rcp in self.translation_board for r in rcp]
+            file.writelines(lines)
+            print(f'File "{file_name}" saved.', file=sys.stderr)
+
+    def translate_online(self, target: str, word: str):
+        """
+        Request to `context.reverso` for translation and store retrieved
+        translations in instance attribute.
+
+        After that this attribute is used for file storage and console
+        output, without repeating the same steps
+        """
+
+        target_lang = target.capitalize()
+        url = f'{self.ADDRESS}/{self.direction(target)}/{word}'
+        print(f'Request for {target_lang} translation to: {url}')
+
+        r = session.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         print(f'{r.status_code} {r.reason}')
 
         if r.ok:
-            # Cook the pizza, ee.. soup
+            """Prepare translation board"""
+
+            # parse response
             soup = BeautifulSoup(r.content, 'html.parser')
+            # parse translations
             self.translations = [
                 t.text for i, t in
                 enumerate(soup.find_all('span', {'class': 'display-term'}))
             ]
-
-            # Cook examples translation soups
-            source_soup = soup.find_all('div', {'class': 'src ltr'})
-            target_soup = soup.find_all('div', {'class': 'trg ltr'})
-            # Prepare examples translation pairs with stripping values texts
+            # parse examples
+            source_soup = soup.find_all('div', {'class': 'src'})
+            target_soup = soup.find_all('div', {'class': 'trg'})
+            # zip (pair) examples for use later
             self.examples = zip(
                 [e.text.strip() for e in source_soup if e.text.strip()],
                 [e.text.strip() for e in target_soup if e.text.strip()]
             )
 
-            # Bring your meal to the table, and say: dinner!
-            self.dinner()
+            # Complete lang translation board for all translations board
+            lang_translation_board = {
+                'translations': self.translations,
+                'examples': self.examples,
+            }
 
-    def dinner(self):
-        target_language = self.LANGS[self.target_lang].capitalize()
-        print(f'\n{target_language} Translations:')
-        print(*self.translations, sep='\n')
-        print(f'\n{target_language} Examples:')
-        print(*['\n'.join(e) for e in self.examples], sep='\n\n')
+            def prepare_lang_translation(source_lang, translations_count):
+                if target == source_lang:
+                    # skip translation to source_lang
+                    return None
+
+                recipe = []
+                target_language = target.capitalize()
+
+                recipe.append(f'{target_language} Translations:')
+                t = lang_translation_board['translations']
+                translations = [t[0]] if translations_count > 1 else t
+                recipe += translations
+
+                recipe.extend(['', f'{target_language} Examples:'])
+
+                e = lang_translation_board['examples']
+                # get all examples or just first if target_lang was `0`
+                ex = [list(e)[0]] if translations_count > 1 else list(e)
+                # flatten the array with examples pairs
+                recipe.extend([rcp for tr in ex for rcp in list(tr) + ['']])
+                # add new line between different languages translations
+                recipe.extend([''])
+
+                return recipe
+
+            single_translation = prepare_lang_translation(
+                self.LANGS[self.source_lang],
+                len(self.translations_board.keys())
+            )
+            if single_translation:
+                self.translation_board.append(single_translation)
+
+            self.translations_board[target] = lang_translation_board
+
+    def report(self):
+        """
+        Print report to console for tests purposes
+        """
+
+        translations_count = len(self.translations_board.keys())
+        print(
+            f'There is translations board with {translations_count} '
+            f'languages!',
+            file=sys.stderr
+        )
+        for line in self.translation_board:
+            print(*line, sep='\n')
 
 
 """
@@ -84,10 +177,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-t', '--test', action='store_true')
 if parser.parse_args().test:
     Translator().translate(3, 4, 'hello')
-    exit('Thanks for testing!')
+    Translator().translate(3, 0, 'hello')
+    Translator().translate(12, 3, 'глаза')
+    exit('Enjoy the translations!')
 
 Translator().translate(
-    int(input('Type the number of your language:\n')),
-    int(input('Type the number of language you want to translate to:\n')),
-    input('Type the word you want to translate:\n')
+    int(input("Type the number of your language:\n")),
+    int(input(
+        "Type the number of a language you want to translate to"
+        " or '0' to translate to all languages:\n"
+    )),
+    input("Type the word you want to translate:\n")
 )
