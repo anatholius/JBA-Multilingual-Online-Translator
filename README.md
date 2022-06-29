@@ -1,16 +1,14 @@
 # Multilingual Online Translator
 
-## Objectives - `Stage 5/7`
+## Objectives - `Stage 6/7`
 
-Add the following functionality to your program:
+At this stage, your program should:
 
-1. Before taking an input specifying the target language, output the message
-   Type the number of a language you want to translate to or '0' to translate
-   to all languages:
-2. If the user inputs 0 as the target language, translate the word to all
-   available languages.
-3. Output results to the terminal, as in the previous stage. At this stage,
-   it's enough to print just one translation and one sentence pair per target
-   language.
-4. Save results of the search to a file named word.txt, where word is the word
-   that was being translated.
+1. Instead of all inputs, take command-line arguments. The first argument is
+   the name of the source language, the second argument is the name of the
+   target language, the third argument is the word. If the word should be
+   translated to all languages, the second argument will be all.
+2. The rest of the functionality should remain the same as in the previous
+   stage.
+
+You'll see some significant changes in the usability of the app!
