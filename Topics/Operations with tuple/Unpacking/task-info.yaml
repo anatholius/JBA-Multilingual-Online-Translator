@@ -8,5 +8,8 @@ files:
         return unpacked
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/9446#comment
-status: Failed
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Thu, 30 Jun 2022 21:26:26 UTC
 record: -1
