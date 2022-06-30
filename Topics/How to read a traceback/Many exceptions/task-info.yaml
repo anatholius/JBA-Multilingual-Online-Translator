@@ -12,5 +12,8 @@ files:
             print(math.sqrt(int(number)))
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/11716#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Thu, 30 Jun 2022 05:28:24 UTC
 record: -1
