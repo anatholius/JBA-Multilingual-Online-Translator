@@ -1,0 +1,18 @@
+type: choice
+is_multiple_choice: true
+options:
+- text: You can use <code>index()</code> and <code>count()</code> with both of them.
+- text: Both can be used as dictionary keys.
+- text: You can add elements to both of them.
+- text: They can be nested in each other.
+- text: Membership testing doesn't work for them.
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/15514#comment
+status: Solved
+record: -1

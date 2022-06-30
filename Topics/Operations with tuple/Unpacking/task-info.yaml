@@ -1,0 +1,12 @@
+type: code
+files:
+- name: main.py
+  visible: true
+  text: |-
+    def unpack(input_tuple):
+        # your code here
+        return unpacked
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9446#comment
+status: Failed
+record: -1

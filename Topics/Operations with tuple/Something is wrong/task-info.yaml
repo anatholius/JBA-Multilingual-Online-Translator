@@ -1,0 +1,17 @@
+type: choice
+is_multiple_choice: true
+options:
+- text: new_tup = tup_of_int + 4
+- text: tup_of_int.append(4)
+- text: new_tup = tup_of_int * 1.3
+- text: new_tup = tup_of_int * 2
+files:
+- name: main.py
+  visible: true
+  text: |+
+    #  You can experiment here, it won’t be checked
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9440#comment
+status: Solved
+record: -1
