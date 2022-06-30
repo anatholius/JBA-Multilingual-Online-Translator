@@ -170,6 +170,12 @@ files:
     if __name__ == '__main__':
         TranslatorTest('translator.translator').run_tests()
   learner_created: false
-feedback_link: https://hyperskill.org/projects/99/stages/548/implement#comment
-status: Unchecked
-record: -1
+- name: translator/online_translator.py
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/8975#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Thu, 30 Jun 2022 02:45:54 UTC
+record: 6
