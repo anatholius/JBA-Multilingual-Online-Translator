@@ -105,13 +105,6 @@ class OnlineTranslator:
 
         if len(r.history) or 400 < r.status_code < 500:
             print(UnsupportedTranslationError(word_to_translate))
-            # print(
-            #     'Redirection when translating online!\nCannot translate the '
-            #     f'word "{word_to_translate}" from language '
-            #     f'"{word_to_translate.capitalize()}" to language '
-            #     f'"{target_lang_name}"\n',
-            #     file=sys.stderr
-            # )
         elif r.ok:
             print(f'{r.status_code} {r.reason}')  # request status
             soup = BeautifulSoup(r.content, 'html.parser')
