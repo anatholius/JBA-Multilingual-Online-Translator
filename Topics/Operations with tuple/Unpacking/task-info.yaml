@@ -1,0 +1,15 @@
+type: code
+files:
+- name: main.py
+  visible: true
+  text: |-
+    def unpack(input_tuple):
+        # your code here
+        return unpacked
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9446#comment
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Thu, 30 Jun 2022 21:28:54 UTC
+record: -1

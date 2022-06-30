@@ -137,6 +137,15 @@ files:
     if __name__ == '__main__':
         TranslatorTest('translator.translator').run_tests()
   learner_created: false
+- name: brrrrrrrrrrrrrrrrk.txt
+  visible: true
+  learner_created: true
+- name: translator/online_translator.py
+  visible: true
+  learner_created: true
+- name: translator/exceptions.py
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/8972#comment
 status: Failed
 feedback:
