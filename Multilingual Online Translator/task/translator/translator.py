@@ -4,8 +4,8 @@ Local translator with remote translating.
 
 import argparse
 
-from online_translator import OnlineTranslator
 from exceptions import NothingToTranslateError
+from online_translator import OnlineTranslator
 
 
 def main():
