@@ -13,5 +13,8 @@ files:
             i += 1
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/11714#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: <html>Correct solution</html>
+  time: Thu, 30 Jun 2022 05:01:26 UTC
 record: -1

@@ -1,8 +1,8 @@
 def print_list(some_list):
-
-    while i < range(len(some_list)):
-        if some_list[i] % 2 == 0:
+    i = 0
+    while i < len(some_list):
+        if int(some_list[i]) % 2 == 0:
             print(some_list[i])
-        if some_list[i] % 3 = 0:
+        if int(some_list[i]) % 3 == 0:
             print(some_list[i] % 3)
         i += 1
