@@ -340,6 +340,9 @@ files:
     if __name__ == '__main__':
         OnlineTranslator()
   learner_created: true
+- name: translator/exceptions.py
+  visible: true
+  learner_created: true
 - name: brrrrrrrrrrrrrrrrk.txt
   visible: true
   learner_created: true
