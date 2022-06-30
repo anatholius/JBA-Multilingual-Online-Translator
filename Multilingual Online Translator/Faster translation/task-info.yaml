@@ -170,20 +170,12 @@ files:
     if __name__ == '__main__':
         TranslatorTest('translator.translator').run_tests()
   learner_created: false
-- name: love.txt
+- name: translator/online_translator.py
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/8975#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Exception in test #1
-
-    Traceback (most recent call last):
-      File " File "/home/anatol/projects/python/learning/Multilingual Online Translator/Multilingual Online Translator/task/translator/translator.py", line 216, in <module>
-        args = parser.parse_args()
-    argparse.ArgumentError: argument source_lang: invalid int value: 'english'
-
-    Arguments: english all love
-  time: Wed, 29 Jun 2022 12:11:51 UTC
-record: -1
+  message: Congratulations!
+  time: Thu, 30 Jun 2022 02:45:54 UTC
+record: 6
