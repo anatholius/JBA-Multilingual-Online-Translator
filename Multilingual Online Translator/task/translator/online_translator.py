@@ -3,6 +3,10 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
+from exceptions import InternetConnectionError, \
+    UnsupportedLanguageError, \
+    UnsupportedTranslationError
+
 # speed up download
 session = requests.Session()
 
@@ -42,11 +46,15 @@ class OnlineTranslator:
     def translate(self, source: str, target: str, word: str):
         """Main translation action in class."""
 
+        if source not in self.LANGS:
+            exit(UnsupportedLanguageError(source))
+        elif target not in self.LANGS + ['all']:
+            print(UnsupportedLanguageError(target))
+            return
+
         source = self.LANGS.index(source)
-        if target in self.LANGS:
-            target = self.LANGS.index(target)
-        else:
-            target = 0
+        target = 0 if target == 'all' else self.LANGS.index(target)
+
         self.source_lang = source
         self.target_lang = target
         self.word = word
@@ -89,15 +97,14 @@ class OnlineTranslator:
         url = f'{self.ADDRESS}/{self.direction(target)}/{word_to_translate}'
         print(f'Request for {target_lang_name} translation to: {url}')
 
-        r = session.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-        if len(r.history):
-            print(
-                'Redirection when translating online!\nCannot translate the '
-                f'word "{word_to_translate}" from language '
-                f'"{source_lang.capitalize()}" to language '
-                f'"{target_lang_name}"\n',
-                file=sys.stderr
-            )
+        r = None
+        try:
+            r = session.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        except requests.exceptions.ConnectionError:
+            exit(InternetConnectionError())
+
+        if len(r.history) or 400 < r.status_code < 500:
+            print(UnsupportedTranslationError(word_to_translate))
         elif r.ok:
             print(f'{r.status_code} {r.reason}')  # request status
             soup = BeautifulSoup(r.content, 'html.parser')

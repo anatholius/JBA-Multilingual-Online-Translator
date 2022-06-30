@@ -5,6 +5,7 @@ Local translator with remote translating.
 import argparse
 
 from online_translator import OnlineTranslator
+from exceptions import NothingToTranslateError
 
 
 def main():
@@ -51,9 +52,8 @@ def main():
         exit('Enjoy the translations!')
 
     if each_of:
-        print('args_dict', args_dict)
         if args_dict['source_lang'] == args_dict['target_lang']:
-            exit('\nThere is nothing to translate from {} to {}!\n'.format(
+            exit(NothingToTranslateError(
                 args_dict['source_lang'].capitalize(),
                 args_dict['target_lang'].capitalize(),
             ))

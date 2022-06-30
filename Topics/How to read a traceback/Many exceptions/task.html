@@ -1,0 +1,35 @@
+<h2>Many exceptions</h2>
+<html>
+ <head></head>
+ <body>
+  <p>We wrote a <code class="language-python">find_sqrt()</code> function to calculate the square root of a number and added a <code class="language-python">try-except</code> block in case the user chooses to pass <code class="language-python">"2"</code> (string type) instead of <code class="language-python">2</code> (integer type) as an argument.</p> 
+  <p>But we did not take into account that the user can call a function like this:</p> 
+  <pre><code class="language-python">find_sqrt('One')</code></pre> 
+  <p>And then we get the next "long" traceback:</p> 
+  <pre><code class="language-no-highlight">Traceback (most recent call last):
+  File "C:/Users/laysa/PycharmProjects/untitled/file.py", line 9, in find_sqrt
+    print(math.sqrt(number))
+TypeError: must be real number, not str
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:/Users/laysa/PycharmProjects/untitled/file.py", line 14, in &lt;module&gt;
+    find_sqrt('One')
+  File "C:/Users/laysa/PycharmProjects/untitled/file.py", line 11, in find_sqrt
+    print(math.sqrt(int(number)))
+ValueError: invalid literal for int() with base 10: 'One'</code></pre> 
+  <p>Read the traceback and try to figure out where something went wrong. Correct the code so that in such situations, when the user wants to enter a number in letters, the program shows the following message instead of a traceback: <code class="language-python">Please pass a number like "5" or 5</code>.</p> 
+  <p><button class="btn-sm btn-outline-secondary" onclick="getElementById('hint-1423').style.display='inline'"> Hint </button> </p>
+  <div id="hint-1423" style="display:none;">
+   You 
+   <em>can</em> use the 
+   <code class="language-python">try-except</code> block in the 
+   <code class="language-python">except TypeError</code> statement.
+  </div>
+  <p></p>
+ </body>
+</html><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">4</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">2.0</code></pre><br><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">One</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">Please pass a number like &quot;5&quot; or 5</code></pre><br><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 15 seconds</font><br><br>
+<b>Caution</b><br><br>
+You may see errors in your code or execution results due to missing context. Don’t worry about it, just write the solution and press Check.
+<br><br>
